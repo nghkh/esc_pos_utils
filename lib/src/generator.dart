@@ -145,25 +145,36 @@ class Generator {
 
     // Create a black bottom layer
     final biggerImage = copyResize(image, width: widthPx, height: heightPx);
-    fill(biggerImage, 0);
+    // fill(biggerImage, 0);
     // final blackImage =  fill(biggerImage, color: ColorRgb8(0, 0, 0),);
     // Insert source image into bigger one
     // dr(biggerImage, image, dstX: 0, dstY: 0);
-    drawImage(biggerImage, image, dstX: 0, dstY: 0);
+    // drawImage(biggerImage, image, dstX: 0, dstY: 0);
 
     int left = 0;
     final List<List<int>> blobs = [];
 
     while (left < widthPx) {
-      final Image slice = copyCrop(biggerImage, left, 0, lineHeight, heightPx);
-      // final Image slice = copyCrop(blackImage, x: left, y: 0, width: lineHeight,height: heightPx);
+      // final Image slice = copyCrop(biggerImage, left, 0, lineHeight, heightPx);
+      final Image slice = copyCrop(biggerImage, x: left, y: 0, width: lineHeight,height: heightPx);
       final widthImg = slice.width;
       final heightImg = slice.height;
       final lengthImg = slice.length;
       final bytesImg = Uint8List(widthImg * heightImg);
-      for (var i = 0, len = lengthImg; i < len; ++i) {
-        bytesImg[i] = getLuminance(slice[i]);
+      // for (var i = 0, len = lengthImg; i < len; ++i) {
+      //   bytesImg[i] = getLuminance(Colo).toInt();
+      // }
+      for(int y = 0; y < heightImg; y++) {
+        for(int x = 0; x < widthImg; x++) {
+          final int index = y * widthImg + x;
+          final  r = slice.getPixel(x, y).r;
+          final  g = slice.getPixel(x, y).g;
+          final  b = slice.getPixel(x, y).b;
+          final int luminance = ((0.2126 * r) + (0.7152 * g) + (0.0722 * b)).toInt();
+          bytesImg[index] = luminance;
+        }
       }
+
       // final Uint8List bytes = slice.getBytes(format: Format.luminance);
       final Uint8List bytes = bytesImg;
       blobs.add(bytes);
@@ -589,10 +600,10 @@ class Generator {
     const bool highDensityVertical = true;
 
     invert(image);
-    // flip(image, direction: FlipDirection.horizontal);
-    flip(image, Flip.horizontal);
-    // final Image imageRotated = copyRotate(image, angle: 270);
-    final Image imageRotated = copyRotate(image, 270);
+    flip(image, direction: FlipDirection.horizontal);
+    // flip(image, Flip.horizontal);
+    final Image imageRotated = copyRotate(image, angle: 270);
+    // final Image imageRotated = copyRotate(image, 270);
 
     const int lineHeight = highDensityVertical ? 3 : 1;
     final List<List<int>> blobs = _toColumnFormat(imageRotated, lineHeight * 8);

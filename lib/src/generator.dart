@@ -145,16 +145,20 @@ class Generator {
 
     // Create a black bottom layer
     final biggerImage = copyResize(image, width: widthPx, height: heightPx);
-    fill(biggerImage, 0);
+    // fill(biggerImage, 0);
+    fill(biggerImage, color: ColorRgb8(0, 0, 0),);
     // Insert source image into bigger one
-    drawImage(biggerImage, image, dstX: 0, dstY: 0);
+    // dr(biggerImage, image, dstX: 0, dstY: 0);
+    // drawImage(biggerImage, image, dstX: 0, dstY: 0);
 
     int left = 0;
     final List<List<int>> blobs = [];
 
     while (left < widthPx) {
-      final Image slice = copyCrop(biggerImage, left, 0, lineHeight, heightPx);
-      final Uint8List bytes = slice.getBytes(format: Format.luminance);
+      // final Image slice = copyCrop(biggerImage, left, 0, lineHeight, heightPx);
+      final Image slice = copyCrop(biggerImage, x: left, y: 0, width: lineHeight,height: heightPx);
+      final Uint8List bytes = slice.getBytes();
+      // final Uint8List bytes = slice.getBytes(format: Format.luminance);
       blobs.add(bytes);
       left += lineHeight;
     }
@@ -173,7 +177,8 @@ class Generator {
 
     // R/G/B channels are same -> keep only one channel
     final List<int> oneChannelBytes = [];
-    final List<int> buffer = image.getBytes(format: Format.rgba);
+    final List<int> buffer = image.getBytes(order: ChannelOrder.rgb);
+    // final List<int> buffer = image.getBytes(format: Format.rgba);
     for (int i = 0; i < buffer.length; i += 4) {
       oneChannelBytes.add(buffer[i]);
     }
@@ -577,8 +582,10 @@ class Generator {
     const bool highDensityVertical = true;
 
     invert(image);
-    flip(image, Flip.horizontal);
-    final Image imageRotated = copyRotate(image, 270);
+    flip(image, direction: FlipDirection.horizontal);
+    // flip(image, Flip.horizontal);
+    final Image imageRotated = copyRotate(image, angle: 270);
+    // final Image imageRotated = copyRotate(image, 270);
 
     const int lineHeight = highDensityVertical ? 3 : 1;
     final List<List<int>> blobs = _toColumnFormat(imageRotated, lineHeight * 8);

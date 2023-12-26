@@ -146,7 +146,7 @@ class Generator {
     // Create a black bottom layer
     final biggerImage = copyResize(image, width: widthPx, height: heightPx);
     // fill(biggerImage, 0);
-    final BlackImage =  fill(biggerImage, color: ColorFloat32.rgb(0, 0, 0),);
+    final blackImage =  fill(biggerImage, color: ColorRgb8(0, 0, 0),);
     // Insert source image into bigger one
     // dr(biggerImage, image, dstX: 0, dstY: 0);
     // drawImage(biggerImage, image, dstX: 0, dstY: 0);
@@ -156,7 +156,7 @@ class Generator {
 
     while (left < widthPx) {
       // final Image slice = copyCrop(biggerImage, left, 0, lineHeight, heightPx);
-      final Image slice = copyCrop(BlackImage, x: left, y: 0, width: lineHeight,height: heightPx);
+      final Image slice = copyCrop(blackImage, x: left, y: 0, width: lineHeight,height: heightPx);
       final Uint8List bytes = slice.getBytes();
       // final Uint8List bytes = slice.getBytes(format: Format.luminance);
       blobs.add(bytes);

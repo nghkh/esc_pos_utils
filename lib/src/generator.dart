@@ -157,7 +157,7 @@ class Generator {
     while (left < widthPx) {
       final Image slice = copyCrop(biggerImage, left, 0, lineHeight, heightPx);
       // final Image slice = copyCrop(blackImage, x: left, y: 0, width: lineHeight,height: heightPx);
-      final Uint8List bytes = slice.getBytes();
+      final Uint8List bytes = slice.getBytes(format: Format.luminance);
       // final Uint8List bytes = slice.getBytes(format: Format.luminance);
       blobs.add(bytes);
       left += lineHeight;

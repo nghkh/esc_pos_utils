@@ -157,8 +157,15 @@ class Generator {
     while (left < widthPx) {
       final Image slice = copyCrop(biggerImage, left, 0, lineHeight, heightPx);
       // final Image slice = copyCrop(blackImage, x: left, y: 0, width: lineHeight,height: heightPx);
-      final Uint8List bytes = slice.getBytes(format: Format.luminance);
+      final widthImg = slice.width;
+      final heightImg = slice.height;
+      final lengthImg = slice.length;
+      final bytesImg = Uint8List(widthImg * heightImg);
+      for (var i = 0, len = lengthImg; i < len; ++i) {
+        bytesImg[i] = getLuminance(slice[i]);
+      }
       // final Uint8List bytes = slice.getBytes(format: Format.luminance);
+      final Uint8List bytes = bytesImg;
       blobs.add(bytes);
       left += lineHeight;
     }
